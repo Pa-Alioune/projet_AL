@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'actu_polytech',
     'corsheaders',
     'news',
+    'rest_framework_xml',
 ]
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
