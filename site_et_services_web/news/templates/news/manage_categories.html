@@ -1,0 +1,7 @@
+<!-- templates/manage_categories.html -->
+{% for category in categories %}
+    <h2>{{ category.name }}</h2>
+    <a href="{% url 'manage_category' category.id %}">Modifier</a>
+    <a href="{% url 'delete_category' category.id %}">Supprimer</a>
+    <hr>
+{% endfor %}

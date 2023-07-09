@@ -1,0 +1,6 @@
+<!-- templates/manage_category.html -->
+<form method="post" action="{% url 'manage_category' category.id %}">
+    {% csrf_token %}
+    <input type="text" name="name" value="{{ category.name }}">
+    <button type="submit">Enregistrer</button>
+</form>

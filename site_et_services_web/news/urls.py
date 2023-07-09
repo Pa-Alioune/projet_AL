@@ -15,7 +15,6 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('article/<int:article_id>/', views.article_detail, name='article_detail'),
     path('category/<str:category_name>/', views.category_view, name='category_view'),
-<<<<<<< HEAD
 
 
     path('manage-articles/', views.manage_articles, name='manage_articles'),
@@ -24,10 +23,15 @@ urlpatterns = [
     path('manage-articles/<int:article_id>/delete/', views.delete_article, name='delete_article'),
 
 
-=======
-    # path('article/<int:article_id>/edit/', views.edit_article, name='edit_article'),
-    # path('article/<int:article_id>/delete/', views.delete_article, name='delete_article'),
-    path('soap/', soap_view, name='soap'), # type: ignore
-    path('api/', include(router.urls)),
->>>>>>> 9c7229121b3e771fb4c76be051a34d121413f8ac
+
+
+    path('manage-users/', views.manage_users, name='manage_users'),
+    path('manage-users/<int:user_id>/', views.manage_user, name='manage_user'),
+    path('manage-users/<int:user_id>/delete/', views.delete_user, name='delete_user'),
+    path('manage-categories/', views.manage_categories, name='manage_categories'),
+    path('manage-categories/<int:category_id>/', views.manage_category, name='manage_category'),
+    path('manage-categories/add/', views.add_category, name='add_category'),
+    path('manage-categories/<int:category_id>/delete/', views.delete_category, name='delete_category'),
+
+
 ]

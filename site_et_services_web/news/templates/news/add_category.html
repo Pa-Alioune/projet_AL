@@ -1,0 +1,7 @@
+
+<!-- templates/add_category.html -->
+<form method="post" action="{% url 'add_category' %}">
+    {% csrf_token %}
+    <input type="text" name="name">
+    <button type="submit">Ajouter</button>
+</form>

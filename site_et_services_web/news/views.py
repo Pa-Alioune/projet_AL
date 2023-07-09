@@ -44,7 +44,6 @@ def category_view(request, category_name):
 # def delete_article(request, article_id):
    
 #     pass
-<<<<<<< HEAD
 # site_web/views.py
 
 @login_required(login_url='login')
@@ -93,8 +92,107 @@ def delete_article(request, article_id):
         return redirect('manage_articles')
     else:
         return render(request, 'news/unauthorized.html')
+    
+########gestiin utilisateur et categorie    
 
-=======
+@login_required(login_url='login')
+def manage_users(request):
+    if request.user.role == 'admin':
+        users = User.objects.all()
+        return render(request, 'news/manage_users.html', {'users': users})
+    else:
+        return render(request, 'news/unauthorized.html')
+
+@login_required(login_url='login')
+def manage_user(request, user_id):
+    if request.user.role == 'admin':
+        user = get_object_or_404(User, id=user_id)
+        if request.method == 'POST':
+            user.username = request.POST.get('username')
+            user.email = request.POST.get('email')
+            user.save()
+            return redirect('manage_users')
+        else:
+            return render(request, 'news/manage_user.html', {'user': user})
+
+@login_required(login_url='login')
+def delete_user(request, user_id):
+    if request.user.role == 'admin':
+        user = get_object_or_404(User, id=user_id)
+        user.delete()
+        return redirect('manage_users')
+    else:
+        return render(request, 'news/unauthorized.html')
+
+@login_required(login_url='login')
+def manage_categories(request):
+    if request.user.role in ['editor', 'admin']:
+        categories = Category.objects.all()
+        return render(request, 'news/manage_categories.html', {'categories': categories})
+    else:
+        return render(request, 'news/unauthorized.html')
+
+@login_required(login_url='login')
+def manage_category(request, category_id):
+    if request.user.role in ['editor', 'admin']:
+        category = get_object_or_404(Category, id=category_id)
+        if request.method == 'POST':
+            category.name = request.POST.get('name')
+            category.save()
+            return redirect('manage_categories')
+        else:
+            return render(request, 'news/manage_category.html', {'category': category})
+
+@login_required(login_url='login')
+def add_category(request):
+    if request.user.role in ['editor', 'admin']:
+        if request.method == 'POST':
+            name = request.POST.get('name')
+            category = Category.objects.create(name=name)
+            return redirect('manage_categories')
+        else:
+            return render(request, 'news/add_category.html')
+    else:
+        return render(request, 'news/unauthorized.html')
+
+@login_required(login_url='login')
+def delete_category(request, category_id):
+    if request.user.role in ['editor', 'admin']:
+        category = get_object_or_404(Category, id=category_id)
+        category.delete()
+        return redirect('manage_categories')
+    else:
+        return render(request, 'news/unauthorized.html')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 class MultipleSerializerMixin:
 
@@ -134,4 +232,3 @@ class ArticleCategoryViewSet(MultipleSerializerMixin, ModelViewSet):
             return Response(serializer.data, content_type='application/xml')
         else:
             return Response(serializer.data)        
->>>>>>> 9c7229121b3e771fb4c76be051a34d121413f8ac

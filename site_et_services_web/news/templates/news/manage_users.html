@@ -1,0 +1,8 @@
+<!-- templates/manage_users.html -->
+{% for user in users %}
+    <h2>{{ user.username }}</h2>
+    <p>Email: {{ user.email }}</p>
+    <a href="{% url 'manage_user' user.id %}">Modifier</a>
+    <a href="{% url 'delete_user' user.id %}">Supprimer</a>
+    <hr>
+{% endfor %}
