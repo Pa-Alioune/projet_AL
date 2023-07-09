@@ -16,11 +16,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from actu_polytech.views import soap_view
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
         path('', include('actu_polytech.urls')),
-        
+        path('soap/', soap_view, name='soap'), # type: ignore
         path('', include('news.urls')),
 ]
