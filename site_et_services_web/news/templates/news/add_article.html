@@ -9,7 +9,7 @@
     <title>Add article</title>
 </head>
 <body>
-    <form method="post" action="{% url 'news:add_article' %}">
+    <form method="post" action="{% url 'add_article' %}">
         {% csrf_token %}
         <input type="text" name="title">
         <textarea name="content"></textarea>

@@ -82,7 +82,8 @@ def add_article(request):
             content = request.POST.get('content')
             category_id = request.POST.get('category_id')
             category = get_object_or_404(Category, id=category_id)
-            article = Article.objects.create(title=title, content=content, category=category)
+           
+            article = Article.objects.create(title=title, content=content, category=category, author=request.user)
             return redirect('manage_articles')
         else:
             categories = Category.objects.all()
