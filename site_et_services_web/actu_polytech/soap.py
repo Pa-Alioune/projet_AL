@@ -1,15 +1,16 @@
 import threading
 import os
+os.environ['DJANGO_SETTINGS_MODULE'] = 'site_dactualite.settings'
 import django
+django.setup()
 
 from pysimplesoap.server import SoapDispatcher
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from actu_polytech.models import User
 from pysimplesoap.server import SoapDispatcher
 from http.server import ThreadingHTTPServer
+from django.http import HttpResponse
 
-django.setup()
-os.environ['DJANGO_SETTINGS_MODULE'] = 'site_dactualite.settings'
 
 class UserService(object):
     @staticmethod
@@ -61,16 +62,11 @@ class UserService(object):
             if user.check_password(password):
                 return user.token
             else:
-                return "Mot de passe incorrect"
+                return "Mot de passe incorrecte !"
         except User.DoesNotExist:
             return "Login ou mot de passe incorrecte !"           
 
-dispatcher = SoapDispatcher(
-    name="user_service",
-    location="http://localhost:8001/soap",
-    action="http://localhost:8001/soap",
-    namespace="urn:UserService"
-)
+dispatcher = SoapDispatcher("user_service")
 # Enregistrez les méthodes de service web
 dispatcher.register_function('list_users', UserService.list_users, returns={'users': str})
 dispatcher.register_function('add_user', UserService.add_user, args={'username': str, 'password': str, 'first_name': str, 'last_name': str, 'email': str, 'token': str}, returns={'result': str})
@@ -78,43 +74,39 @@ dispatcher.register_function('delete_user', UserService.delete_user, args={'user
 dispatcher.register_function('update_user', UserService.update_user, args={'username': str, 'new_password': str, 'first_name': str, 'last_name': str, 'email': str, 'token': str}, returns={'result': str})
 dispatcher.register_function('authenticate_user', UserService.authenticate_user, args={'username': str, 'password': str}, returns={'result': str})
 
-class SoapHandler(BaseHTTPRequestHandler):
-    def do_POST(self):
-        content_length = int(self.headers['Content-Length'])
-        request_body = self.rfile.read(content_length).decode('utf-8')
+# Classe pour gérer les requêtes SOAP
+class SOAPHandler:
+    def __init__(self, request):
+        self.request = request
 
-        try:
-            response = dispatcher.dispatch(request_body)
-        except Exception as e:
-            # Créer une réponse d'erreur SOAP personnalisée
-            faultcode = 'Server'
-            faultstring = str(e)
-            response = self.create_fault_response(faultcode, faultstring)
+    def soap_GET(self):
+       # Convertir le corps de la requête en une chaîne de caractères
+        request_body = self.request.body.decode('utf-8')
 
-        self.send_response(200)
-        self.send_header('Content-type', 'text/xml')
-        self.end_headers()
-        self.wfile.write(response.encode('utf-8'))
+        # Logique pour gérer les requêtes POST SOAP
+        response = dispatcher.dispatch(request_body)
 
-    def create_fault_response(self, faultcode, faultstring):
-        template = '''
-            <?xml version="1.0" encoding="UTF-8"?>
-            <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
-                <SOAP-ENV:Body>
-                    <SOAP-ENV:Fault>
-                        <faultcode>{}</faultcode>
-                        <faultstring>{}</faultstring>
-                    </SOAP-ENV:Fault>
-                </SOAP-ENV:Body>
-            </SOAP-ENV:Envelope>
-        '''
-        return template.format(faultcode, faultstring)
+        # Retourner la réponse avec le bon en-tête Content-Type
+        return HttpResponse(response, content_type='text/xml; charset=utf-8')
+
+
+    def soap_POST(self):
+        # Convertir le corps de la requête en une chaîne de caractères
+        request_body = self.request.body.decode('utf-8')
+
+        # Logique pour gérer les requêtes POST SOAP
+        response = dispatcher.dispatch(request_body)
+
+        # Retourner la réponse avec le bon en-tête Content-Type
+        return HttpResponse(response, content_type='text/xml; charset=utf-8')
+
+
+
+
 # Créez une instance du serveur SOAP
-soap_server = ThreadingHTTPServer(('localhost', 8001), SoapHandler)
+# soap_server = HTTPServer(('localhost', 8001), SoapHandler)
 
-# Lancez le serveur SOAP en arrière-plan
-server_thread = threading.Thread(target=soap_server.serve_forever)
-server_thread.daemon = True
-server_thread.start()
+# print('Serveur SOAP démarré sur http://localhost:8001/soap')
 
-print('Serveur SOAP démarré sur http://localhost:8001/soap')
+# # Lancez le serveur SOAP dans le flux principal
+# soap_server.serve_forever()
