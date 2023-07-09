@@ -7,7 +7,13 @@ from rest_framework.response import Response
 from rest_framework.renderers import JSONRenderer
 from rest_framework_xml.renderers import XMLRenderer
 from django.http import HttpResponse
+from django.views import View
 
+
+
+
+from django.contrib.auth import get_user_model
+import uuid
 
 from django.shortcuts import render, get_object_or_404, redirect
 from actu_polytech.models import User
@@ -164,6 +170,60 @@ def delete_category(request, category_id):
     else:
         return render(request, 'news/unauthorized.html')
 
+
+
+
+
+
+##### gestion Token 
+
+class ManageTokenView(View):
+    def get(self, request):
+        if request.user.is_authenticated and request.user.role == 'admin':
+            token_requests = get_user_model().objects.filter(token_requested=True)
+            return render(request, 'news/manage_tokens.html', {'token_requests': token_requests})
+        else:
+            return HttpResponse("Unauthorized", status=401)
+
+    def post(self, request):
+        if request.user.is_authenticated and request.user.role == 'admin':
+            action = request.POST.get('action')
+            user_id = request.POST.get('user_id')
+            user = get_user_model().objects.get(id=user_id)
+            if action == 'generate':
+                user.token = uuid.uuid4()
+                user.token_requested = True
+                user.save()
+            elif action == 'delete':
+                user.token = None
+                user.token_requested = False
+                user.save()
+            return redirect('manage-tokens')
+        else:
+            return HttpResponse("Unauthorized", status=401)
+        
+
+class DeleteTokenView(View):
+    def post(self, request):
+        if request.user.is_authenticated and request.user.role == 'admin':
+            user_id = request.POST.get('user_id')
+            user = get_user_model().objects.get(id=user_id)
+            user.token = None
+            user.save()
+            return HttpResponse("Token deleted.")
+        else:
+            return HttpResponse("Unauthorized", status=401)
+
+
+
+class RequestTokenView(View):
+    def get(self, request):
+        if request.user.is_authenticated:
+            request.user.token_requested = True
+            request.user.save()
+            return HttpResponse("Token requested.")
+        else:
+            return HttpResponse("Unauthorized", status=401)
 
 
 

@@ -34,4 +34,10 @@ urlpatterns = [
     path('manage-categories/<int:category_id>/delete/', views.delete_category, name='delete_category'),
 
 
+
+    path('request-token/', RequestTokenView.as_view(), name='request-token'),
+    path('manage-tokens/', ManageTokenView.as_view(), name='manage-tokens'),
+    path('delete-token/', DeleteTokenView.as_view(), name='delete-token'),
+
+
 ]
