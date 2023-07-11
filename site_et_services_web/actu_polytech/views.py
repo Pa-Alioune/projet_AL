@@ -1,4 +1,6 @@
 from django.conf import settings
+import os
+from django.http import HttpResponse
 from django.contrib.auth import login
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
@@ -18,6 +20,18 @@ def soap_view(request):
         return handler.soap_GET()
     elif request.method == 'POST':
         return handler.soap_POST()
+    
+@csrf_exempt
+def wsdl_view(request):
+    # Chemin vers le fichier WSDL
+    wsdl_file_path = os.path.join(settings.BASE_DIR, 'actu_polytech', 'wsdl', 'my_service.wsdl')
+    
+    # Lisez le contenu du fichier WSDL
+    with open(wsdl_file_path, 'rb') as wsdl_file:
+        wsdl_content = wsdl_file.read()
+
+    # Renvoyez le contenu du fichier WSDL comme réponse HTTP
+    return HttpResponse(wsdl_content, content_type='text/xml')    
 
 # Create your views here.
 def signup_page(request):

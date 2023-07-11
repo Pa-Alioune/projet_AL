@@ -1,9 +1,10 @@
-import threading
+import io
 import os
 os.environ['DJANGO_SETTINGS_MODULE'] = 'site_dactualite.settings'
 import django
 django.setup()
 
+from django.conf import settings
 from pysimplesoap.server import SoapDispatcher
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from actu_polytech.models import User
@@ -73,6 +74,15 @@ dispatcher.register_function('add_user', UserService.add_user, args={'username':
 dispatcher.register_function('delete_user', UserService.delete_user, args={'username': str, 'token': str}, returns={'result': str})
 dispatcher.register_function('update_user', UserService.update_user, args={'username': str, 'new_password': str, 'first_name': str, 'last_name': str, 'email': str, 'token': str}, returns={'result': str})
 dispatcher.register_function('authenticate_user', UserService.authenticate_user, args={'username': str, 'password': str}, returns={'result': str})
+
+# Générez le contenu du fichier WSDL
+wsdl_content = dispatcher.wsdl()
+
+# Chemin vers le fichier WSDL
+wsdl_file_path = os.path.join(settings.BASE_DIR, 'actu_polytech', 'wsdl', 'my_service.wsdl')
+# Écrivez le contenu du fichier WSDL dans le fichier
+with open(wsdl_file_path, 'w', encoding='utf-8') as wsdl_file:
+    wsdl_file.write(wsdl_content.decode('utf-8'))
 
 # Classe pour gérer les requêtes SOAP
 class SOAPHandler:
