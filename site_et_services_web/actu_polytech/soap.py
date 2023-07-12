@@ -27,7 +27,7 @@ class UserService(object):
     def add_user(username, password, first_name, last_name, email, token):
         try:
             user = User.objects.get(token=token)
-            new_user = User(username=username, token=token, first_name=first_name, last_name=last_name, email=email)
+            new_user = User(username=username, first_name=first_name, last_name=last_name, email=email)
             new_user.set_password(password)
             new_user.save()
             return "Utilisateur ajouté avec succès"
