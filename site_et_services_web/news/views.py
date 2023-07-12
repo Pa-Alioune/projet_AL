@@ -238,7 +238,7 @@ class RequestTokenView(View):
         if request.user.is_authenticated:
             request.user.token_requested = True
             request.user.save()
-            return HttpResponse("Token requested.")
+            return render(request, 'news/token.html')
         else:
             return render(request, 'news/unauthorized.html')
 

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Erreur 401 - Non autorisé</title>
+  <style>
+    body {
+      background-color: #f9f9f9;
+      color: #333;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+    }
+
+    .error-code {
+      font-size: 100px;
+      color: #e74c3c;
+    }
+
+    h1 {
+      color: #34495e;
+    }
+
+    p {
+      color: #7f8c8d;
+    }
+
+    a {
+      color: #3498db;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="error-code">Token requested.</div>
+    <h1>Votre Demande de token a bien été enregistré</h1>
+
+    <a href="{% url 'index' %}">Retour à l'accueil</a>
+  </div>
+</body>
+</html>
