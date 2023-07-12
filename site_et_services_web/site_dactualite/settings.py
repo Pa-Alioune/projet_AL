@@ -140,3 +140,6 @@ AUTH_USER_MODEL = 'actu_polytech.User'
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'index'
 LOGOUT_REDIRECT_URL = LOGIN_URL
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = 'media/'
