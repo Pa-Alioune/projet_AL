@@ -37,7 +37,8 @@ class UserService(object):
     @staticmethod
     def delete_user(username, token):
         try:
-            user = User.objects.get(token=token)
+            user_admin = User.objects.get(token=token)
+            user = User.objects.get(username=username)
             user.delete()
             return "Utilisateur supprimé avec succès"
         except User.DoesNotExist:
@@ -46,7 +47,8 @@ class UserService(object):
     @staticmethod
     def update_user(username, new_password, first_name, last_name, email, token):
         try:
-            user = User.objects.get(token=token)
+            user_admin = User.objects.get(token=token)
+            user = User.objects.get(username=username)
             user.set_password(new_password)
             user.first_name = first_name
             user.last_name = last_name
