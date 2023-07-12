@@ -1,4 +1,3 @@
-
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -28,7 +27,6 @@
                         <li class="nav-item"><a class="nav-link" href="{% url 'manage_categories' %}">Gestion Categories</a></li>
                        <li class="nav-item"><a class="nav-link" href="{% url 'manage-tokens' %}">Gestion Tokens</a></li>
                        <li class="nav-item"><a class="nav-link" href="{% url 'manage_users' %}">Gestion utilisateurs</a></li>
-                       <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Se Deconnecter</a></li>
                     </ul>
                 </div>
             </div>
@@ -38,10 +36,9 @@
             <div class="container px-lg-5">
                 <div class="p-4 p-lg-5 bg-light rounded-3 text-center">
                     <div class="m-4 m-lg-5">
-                        <h1 class="display-5 fw-bold">Gestion Articles</h1>
-                        <p class="fs-4">Dans cette page vous pouvez gerer modifier supprimer ou ajouter les articles  selon vos droits</p>
-                        <a class="btn btn-primary btn-lg" href="{% url 'add_article' %}">Add Article</a>
-                        
+                        <h1 class="display-5 fw-bold">Bienvenue dans la page d'accueil d'administratin!</h1>
+                        <p class="fs-4">Dans cette page vous pouvez gerer modifier supprimer ou ajouter selon vos droits</p>
+                        <!-- <a class="btn btn-primary btn-lg" href="#!">Call to action</a> -->
                     </div>
                 </div>
             </div>
@@ -51,30 +48,42 @@
             <div class="container px-lg-5">
                 <!-- Page Features-->
                 <div class="row gx-lg-5">
-                   
-                   <!-- templates/manage_articles.html -->
-                    {% for article in articles %}
                     <div class="col-lg-6 col-xxl-4 mb-5">
                         <div class="card bg-light border-0 h-100">
                             <div class="card-body text-center p-4 p-lg-5 pt-0 pt-lg-0">
-                                <h2 class="fs-4 fw-bold">{{ article.title }}</h2>
-                                
-                                
-                                <p>{{ article.content }}</p>
-                                <a href="{% url 'manage_article' article.id %}">Modifier</a>
-                                <a href="{% url 'delete_article' article.id %}">Supprimer</a>
+                                <div class="feature bg-primary bg-gradient text-white rounded-3 mb-4 mt-n4"><a href="{% url 'manage_users' %}"><i class="bi bi-people"></i></a></div>
+                                <h2 class="fs-4 fw-bold">Gerer utilisateur</h2>
+                                <p class="mb-0">Dans cette section vous pouvez faire la gestion des utilisateurs</p>
                             </div>
                         </div>
-                    </div>        
-                    {% endfor %}
-                   
-                   
-                                <!-- <div class="feature bg-primary bg-gradient text-white rounded-3 mb-4 mt-n4"></div> -->
-                                
-                                
-                            
-                        
-                   
+                    </div>
+                    <div class="col-lg-6 col-xxl-4 mb-5">
+                        <div class="card bg-light border-0 h-100">
+                            <div class="card-body text-center p-4 p-lg-5 pt-0 pt-lg-0">
+                                <div class="feature bg-primary bg-gradient text-white rounded-3 mb-4 mt-n4"><a href="{% url 'manage_articles' %}"><i class="bi bi-cloud-download"></i></a></div>
+                                <h2 class="fs-4 fw-bold">Gerer Article</h2>
+                                <p class="mb-0">Dans cette section vous pouvez faire la gestion des Articles</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-xxl-4 mb-5">
+                        <div class="card bg-light border-0 h-100">
+                            <div class="card-body text-center p-4 p-lg-5 pt-0 pt-lg-0">
+                                <div class="feature bg-primary bg-gradient text-white rounded-3 mb-4 mt-n4"><a href="{% url 'manage_categories' %}"><i class="bi bi-card-heading"></i></a></div>
+                                <h2 class="fs-4 fw-bold">Gerer Categorie</h2>
+                                <p class="mb-0">Dans cette section vous pouvez faire la gestion des Categorie</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-xxl-4 mb-5">
+                        <div class="card bg-light border-0 h-100">
+                            <div class="card-body text-center p-4 p-lg-5 pt-0 pt-lg-0">
+                                <div class="feature bg-primary bg-gradient text-white rounded-3 mb-4 mt-n4"><a href="{% url 'manage-tokens' %}"><i class="bi bi-key"></i></a></div>
+                                <h2 class="fs-4 fw-bold">Gerer Token</h2>
+                                <p class="mb-0">Dans cette section vous pouvez faire la gestion des Token</p>
+                            </div>
+                        </div>
+                    </div>
                   
                 </div>
             </div>
@@ -89,4 +98,3 @@
         <!-- <script src="js/scripts.js"></script> -->
     </body>
 </html>
-

@@ -40,4 +40,7 @@ urlpatterns = [
     path('delete-token/', DeleteTokenView.as_view(), name='delete-token'),
 
 
+    path('siteadmin/', views.manage_site, name='siteadmin'),
+
+
 ]
