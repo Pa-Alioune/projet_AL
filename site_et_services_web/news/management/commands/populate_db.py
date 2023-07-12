@@ -8,12 +8,15 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         categories = ['Sport', 'Santé', 'Education', 'Politique']
-
+        for category in categories:
+            Category.objects.create(name=category)
 
         # Creating a new user
         User = get_user_model()
-        # user = User.objects.create_user('rone1', 'user1@example.com', 'rone1passer')
-        user = User.objects.get(username='rone1')  # Replace 'existing_username' with the actual username
+        user = User.objects.create_user(
+            'protocole4', 'user1@example.com', 'rone1passer')
+        # Replace 'existing_username' with the actual username
+        user = User.objects.get(username='protocole4')
 
         sport = Category.objects.get(name='Sport')
         politique = Category.objects.get(name='Politique')
@@ -40,4 +43,5 @@ class Command(BaseCommand):
                                category=education,
                                author=user)
 
-        self.stdout.write(self.style.SUCCESS('Database populated successfully'))
+        self.stdout.write(self.style.SUCCESS(
+            'Database populated successfully'))
