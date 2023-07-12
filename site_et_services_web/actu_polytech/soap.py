@@ -69,7 +69,7 @@ class UserService(object):
 
 dispatcher = SoapDispatcher("user_service")
 # Enregistrez les méthodes de service web
-dispatcher.register_function('list_users', UserService.list_users, returns={'users': str})
+dispatcher.register_function('list_users', UserService.list_users, args={'token': str}, returns={'users': str})
 dispatcher.register_function('add_user', UserService.add_user, args={'username': str, 'password': str, 'first_name': str, 'last_name': str, 'email': str, 'token': str}, returns={'result': str})
 dispatcher.register_function('delete_user', UserService.delete_user, args={'username': str, 'token': str}, returns={'result': str})
 dispatcher.register_function('update_user', UserService.update_user, args={'username': str, 'new_password': str, 'first_name': str, 'last_name': str, 'email': str, 'token': str}, returns={'result': str})

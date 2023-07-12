@@ -15,7 +15,7 @@
 			<xsd:element name="list_users">
 				<xsd:complexType>
 					<xsd:all>
-						<xsd:element name="value" type="xsd:anyType"/>
+						<xsd:element name="token" type="xsd:string"/>
 					</xsd:all>
 				</xsd:complexType>
 			</xsd:element>
