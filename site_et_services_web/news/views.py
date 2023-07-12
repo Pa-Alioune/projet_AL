@@ -8,6 +8,7 @@ from rest_framework.renderers import JSONRenderer
 from rest_framework_xml.renderers import XMLRenderer
 from django.http import HttpResponse
 from django.views import View
+from django.utils import timezone
 
 
 
@@ -21,25 +22,33 @@ from actu_polytech.models import User
 
 def index(request):
     articles = Article.objects.all().order_by('-created_at')
+    categories = Category.objects.all()
     paginator = Paginator(articles, 5)  
 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
+    current_time = timezone.now()
+    for article in articles:
+        article.time_diff = (current_time - article.created_at).total_seconds()
 
-    return render(request, 'news/index.html', {'page_obj': page_obj})
+    return render(request, 'news/index.html', {'page_obj': page_obj,'categories': categories,'current_time': current_time})
 
 def article_detail(request, article_id):
     article = Article.objects.get(id=article_id)
     return render(request, 'news/article_detail.html', {'article': article})
 
 def category_view(request, category_name):
+    categories = Category.objects.all()
+    current_time = timezone.now()
     articles = Article.objects.filter(category__name=category_name).order_by('-created_at')
     paginator = Paginator(articles, 5)  
 
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
+    for article in articles:
+        article.time_diff = (current_time - article.created_at).total_seconds()
 
-    return render(request, 'news/category.html', {'page_obj': page_obj})
+    return render(request, 'news/category.html', {'page_obj': page_obj,'categories': categories,'current_time': current_time})
 
 # @login_required
 # def edit_article(request, article_id):
@@ -51,6 +60,13 @@ def category_view(request, category_name):
    
 #     pass
 # site_web/views.py
+@login_required(login_url='login')
+def manage_site(request):
+    if request.user.role in ['editor', 'admin']:
+        
+        return render(request, 'news/admin.html', )
+    else:
+        return render(request, 'news/unauthorized.html')
 
 @login_required(login_url='login')
 def manage_articles(request):
@@ -184,7 +200,7 @@ class ManageTokenView(View):
             token_requests = get_user_model().objects.filter(token_requested=True)
             return render(request, 'news/manage_tokens.html', {'token_requests': token_requests})
         else:
-            return HttpResponse("Unauthorized", status=401)
+            return render(request, 'news/unauthorized.html')
 
     def post(self, request):
         if request.user.is_authenticated and request.user.role == 'admin':
@@ -197,11 +213,11 @@ class ManageTokenView(View):
                 user.save()
             elif action == 'delete':
                 user.token = None
-                user.token_requested = False
+                user.token_requested = True
                 user.save()
             return redirect('manage-tokens')
         else:
-            return HttpResponse("Unauthorized", status=401)
+            return render(request, 'news/unauthorized.html')
         
 
 class DeleteTokenView(View):
@@ -213,7 +229,7 @@ class DeleteTokenView(View):
             user.save()
             return HttpResponse("Token deleted.")
         else:
-            return HttpResponse("Unauthorized", status=401)
+            return render(request, 'news/unauthorized.html')
 
 
 
@@ -224,7 +240,7 @@ class RequestTokenView(View):
             request.user.save()
             return HttpResponse("Token requested.")
         else:
-            return HttpResponse("Unauthorized", status=401)
+            return render(request, 'news/unauthorized.html')
 
 
 

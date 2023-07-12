@@ -1,4 +1,81 @@
-<h2>{{ article.title }}</h2>
-<p>{{ article.content }}</p>
-<p>Category: {{ article.category.name }}</p>
-<p>Author: {{ article.author.username }}</p>
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'news/index.css' %}" />
+    <title>Détails de l'article</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        
+        h1 {
+            color: #333;
+        }
+        
+        p {
+            color: #777;
+        }
+        
+        .article-details {
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 5px;
+            background-color: #f5f5f5;
+        }
+        
+        .article-details h2 {
+            color: #555;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        
+        .article-details p {
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .article-details .meta-info {
+            color: #888;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+          <h1>Article</h1>
+          <nav>
+            <ul>
+            <li><a href="{% url 'index'  %}" id = "Accueil">Accueil</a></li>
+              {% for category in categories %} 
+                   <li>
+                   
+                    <a href="{% url 'category_view' category.name %}"> {{ category.name }}</a>
+                </li>
+                                  
+            
+            {% endfor %}
+      
+            </ul>
+          </nav>
+        </div>
+      </header>
+    <div class="article-details">
+        <h2>{{ article.title }}</h2>
+        <p>{{ article.content }}</p>
+        <div class="meta-info">
+            <p>Category: {{ article.category }}</p>
+            <p>Author: {{ article.author }}</p>
+            <i>Created at: {{ article.created_at }}</i>
+           
+            
+        </div>
+    </div>
+</body>
+</html>

@@ -1,26 +1,62 @@
-<!-- templates/add_article.html -->
+
+
+
+
+<!-- templates/add_category.html -->
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'news/add_article.css' %}">
-    <title>Add article</title>
+    <link rel="stylesheet" href="{% static 'actu_polytech/styles.css' %}" />
+    <title>Add Article</title>
 </head>
-<body>
-    <form method="post" action="{% url 'add_article' %}">
-        {% csrf_token %}
-        <input type="text" name="title">
-        <textarea name="content"></textarea>
-        <select name="category_id">
-            {% for category in categories %}
-                <option value="{{ category.id }}">{{ category.name }}</option>
-            {% endfor %}
-        </select>
-        <button type="submit">Ajouter</button>
-    </form>
+<body>      
+    <div class = "center">
+        <h1>Add Article</h1>
+
+        <form method="post" action="{% url 'add_article' %}">
+            {% csrf_token %}
+                    <div class="txt_field">
+                        <input type="text" name="title">
+                        <span></span>
+                        <label for="">Titre :</label>
+                    </div>
+                    <div class="txt_field">
+                        <textarea name="content"></textarea>
+                        <span></span>
+                        <label for="">content :</label>
+                    </div>
+                    <div class="txt_field">
+                        <select name="category_id">
+                            {% for category in categories %}
+                                <option value="{{ category.id }}">{{ category.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <span></span>
+                        
+                    </div>
+           <input type="submit" value="Ajouter">
+           {%  csrf_token %}
+            <div class="signup_link">
+                    <a href="{% url 'logout' %}">Logout</a>
+
+            </div> 
+        </form>
+        
+            
+            
+           
+            
+        
+        
+    </div>
+    
+    
+    
 </body>
 </html>
-
 
